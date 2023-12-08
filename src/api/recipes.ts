@@ -7,10 +7,12 @@ dotenv.config();
 const url = process.env.BASE_URL;
 const apiKey = process.env.API_KEY;
 
-router.get("/", async (_req, res, next) => {
+router.get("/", async (req, res, next) => {
+  const ingredients = req.query.ingredients
+  console.log(ingredients)
     try {
       const response = await fetch(
-        `${url}/findByIngredients?ingredients=turkey,cheese,kale&ignorePantry=true&ranking=1&number=5&apiKey=${apiKey}`
+        `${url}/findByIngredients?ingredients=${ingredients}&ignorePantry=true&ranking=1&number=5&apiKey=${apiKey}`
       );
       const json = await response.json()
       res.send(json);
