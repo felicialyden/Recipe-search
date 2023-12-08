@@ -17,7 +17,7 @@ model User {
 model Saved {
   id     Int    @id
   title  String
-  img    String
+  image  String
   userId Int
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
