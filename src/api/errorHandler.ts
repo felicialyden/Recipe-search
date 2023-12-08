@@ -3,6 +3,9 @@ import { ErrorRequestHandler } from "express"
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
+    if(err.message === 'Unauthorized to delete') {
+        err.statusCode = 401
+    }
     if(err instanceof PrismaClientKnownRequestError){
         switch (err.code){
             case 'P2002':
