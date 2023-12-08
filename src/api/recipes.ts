@@ -9,7 +9,6 @@ const apiKey = process.env.API_KEY;
 
 router.get("/", async (req, res, next) => {
   const ingredients = req.query.ingredients
-  console.log(ingredients)
     try {
       const response = await fetch(
         `${url}/findByIngredients?ingredients=${ingredients}&ignorePantry=true&ranking=1&number=5&apiKey=${apiKey}`

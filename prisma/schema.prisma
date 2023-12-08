@@ -8,7 +8,16 @@ datasource db {
 }
 
 model User {
-  id    Int    @id @default(autoincrement())
+  id    Int     @id @default(autoincrement())
   name  String
-  email String @unique
+  email String  @unique
+  saved Saved[]
+}
+
+model Saved {
+  id     Int    @id
+  title  String
+  img    String
+  userId Int
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

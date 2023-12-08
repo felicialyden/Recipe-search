@@ -19,6 +19,24 @@ router.get("/:id", async (req, res, next) => {
     }
   });
 
+router.get("/:id/saved", async (req, res, next) => {
+    const userId = Number(req.params.id)
+    try {
+      const response = await prisma.saved.findMany({
+        where: {userId: userId}
+      });
+
+      console.log(response)
+
+      if(!response) {
+        throw Error('No saved recipes')
+      }
+      res.json(response);
+    } catch (error) {
+      next(error);
+    }
+  });
+
   export default {
     router,
   };
