@@ -9,9 +9,13 @@ const apiKey = process.env.API_KEY;
 
 router.get("/", async (req, res, next) => {
   const ingredients = req.query.ingredients
+  const cuisine = req.query.cuisine
+  const diet = req.query.diet
+  console.log(cuisine, diet)
+
     try {
       const response = await fetch(
-        `${url}/complexSearch?includeIngredients=${ingredients}&ignorePantry=true&sort=max-used-ingredients&sortDirection=desc&apiKey=${apiKey}`
+        `${url}/complexSearch?includeIngredients=${ingredients}&diet=${diet}&&cuisine=${cuisine}&ignorePantry=true&sort=max-used-ingredients&sortDirection=desc&apiKey=${apiKey}`
       );
       const json = await response.json()
       res.send(json);
