@@ -11,7 +11,7 @@ router.get("/", async (req, res, next) => {
   const ingredients = req.query.ingredients
     try {
       const response = await fetch(
-        `${url}/findByIngredients?ingredients=${ingredients}&ignorePantry=true&ranking=1&number=5&apiKey=${apiKey}`
+        `${url}/complexSearch?includeIngredients=${ingredients}&ignorePantry=true&sort=max-used-ingredients&sortDirection=desc&apiKey=${apiKey}`
       );
       const json = await response.json()
       res.send(json);

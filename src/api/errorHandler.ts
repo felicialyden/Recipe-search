@@ -16,6 +16,7 @@ const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
             break
         }
      }
+     console.log(err)
     res.status(err.statusCode || 400).json({ error: err.message })
 }
 
