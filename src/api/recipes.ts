@@ -14,7 +14,7 @@ router.get("/", async (req, res, next) => {
 
     try {
       const response = await fetch(
-        `${url}/complexSearch?includeIngredients=${ingredients}&diet=${diet}&&cuisine=${cuisine}&ignorePantry=true&sort=max-used-ingredients&sortDirection=desc&number=5&apiKey=${apiKey}`
+        `${url}/complexSearch?includeIngredients=${ingredients}&diet=${diet}&&cuisine=${cuisine}&ignorePantry=true&sort=max-used-ingredients&sortDirection=desc&number=5&fillIngredients=true&apiKey=${apiKey}`
       );
       const json = await response.json()
       res.send(json);
