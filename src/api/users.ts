@@ -38,7 +38,7 @@ router.post("/", async (req, res, next) => {
     if (error) {
       throw Error("Could not create account");
     }
-    res.json(data);
+    res.json(data.user?.id);
   } catch (error) {
     next(error);
   }
@@ -46,17 +46,16 @@ router.post("/", async (req, res, next) => {
 
 router.post("/login", async (req, res, next) => {
   const {email, password} = req.body;
-  console.log(email, password)
   try {
     const {data, error } = await supabase.auth.signInWithPassword({
      email, password,
     });
-    console.log(data, error)
+    console.log(data.user?.id)
 
     if (error) {
       throw Error("Could not sign in");
     }
-    res.json(data);
+    res.json(data.user?.id);
   } catch (error) {
     next(error);
   }
