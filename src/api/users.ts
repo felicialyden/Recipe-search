@@ -32,10 +32,9 @@ router.post("/", async (req, res, next) => {
       email,
       password,
     });
-    console.log(data, error);
-
+    console.log(data, error, 'data, error');
     if (error) {
-      throw Error("Could not create account");
+      throw Error(error.message);
     }
     res.json(data.user?.id);
   } catch (error) {
@@ -51,9 +50,8 @@ router.post("/login", async (req, res, next) => {
       password,
     });
     console.log(data.user?.id);
-
     if (error) {
-      throw Error("Could not sign in");
+      throw Error(error.message);
     }
     res.json(data.user?.id);
   } catch (error) {
@@ -65,7 +63,7 @@ router.post("/logout", async (req, res, next) => {
   try {
     const { error } = await supabase.auth.signOut();
     if (error) {
-      throw Error("Could not sign out");
+      throw Error(error.message);
     }
     res.json("user signed out");
   } catch (error) {
