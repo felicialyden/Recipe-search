@@ -74,7 +74,7 @@ router.post("/logout", async (req, res, next) => {
 });
 
 router.get("/:id/saved", async (req, res, next) => {
-  const userId = Number(req.params.id);
+  const userId = req.params.id;
   try {
     const response = await prisma.saved.findMany({
       where: { userId: userId },
@@ -92,7 +92,8 @@ router.get("/:id/saved", async (req, res, next) => {
 });
 
 router.post("/:id/saved", async (req, res, next) => {
-  const userId = Number(req.params.id);
+  const userId = req.params.id;
+  console.log(userId)
   const { id, title, image } = req.body;
 
   try {
@@ -111,7 +112,7 @@ router.post("/:id/saved", async (req, res, next) => {
 });
 
 router.delete("/:id/saved", async (req, res, next) => {
-  const userId = Number(req.params.id);
+  const userId = req.params.id;
   const { id } = req.body;
 
   try {

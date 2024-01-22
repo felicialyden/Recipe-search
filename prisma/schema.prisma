@@ -6,22 +6,16 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
-  schemas  = ["public", "auth"]
 }
 
 model User {
   id       Int     @id @default(autoincrement())
   email    String  @unique
-  password String
-
-  @@schema("auth")
 }
 
 model Saved {
   id     Int    @id
   title  String
   image  String
-  userId Int
-
-  @@schema("public")
+  userId String
 }
