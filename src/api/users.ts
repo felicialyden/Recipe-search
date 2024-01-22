@@ -1,14 +1,12 @@
 import { Router } from "express";
 import prisma from "../prisma";
-import { createClient } from '@supabase/supabase-js'
-
+import { createClient } from "@supabase/supabase-js";
 
 const router = Router();
 const supabaseUrl = process.env.SUPABASE_URL as string;
 const supabaseKey = process.env.SUPABASE_KEY as string;
-process.env.NODE_TLS_REJECT_UNAUTHORIZED
-const supabase = createClient(supabaseUrl, supabaseKey)
-
+process.env.NODE_TLS_REJECT_UNAUTHORIZED;
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 router.get("/:id", async (req, res, next) => {
   const userId = Number(req.params.id);
@@ -27,13 +25,14 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
-  const {email, password} = req.body;
-  console.log(email, password)
+  const { email, password } = req.body;
+  console.log(email, password);
   try {
-    const {data, error } = await supabase.auth.signUp({
-     email, password,
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
     });
-    console.log(data, error)
+    console.log(data, error);
 
     if (error) {
       throw Error("Could not create account");
@@ -45,17 +44,30 @@ router.post("/", async (req, res, next) => {
 });
 
 router.post("/login", async (req, res, next) => {
-  const {email, password} = req.body;
+  const { email, password } = req.body;
   try {
-    const {data, error } = await supabase.auth.signInWithPassword({
-     email, password,
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     });
-    console.log(data.user?.id)
+    console.log(data.user?.id);
 
     if (error) {
       throw Error("Could not sign in");
     }
     res.json(data.user?.id);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/logout", async (req, res, next) => {
+  try {
+    const { error } = await supabase.auth.signOut();
+    if (error) {
+      throw Error("Could not sign out");
+    }
+    res.json("user signed out");
   } catch (error) {
     next(error);
   }
@@ -105,10 +117,11 @@ router.delete("/:id/saved", async (req, res, next) => {
   try {
     const response = await prisma.saved.delete({
       where: {
-        id, userId
+        id,
+        userId,
       },
     });
-    if(!response) throw Error('Unauthorized to delete')
+    if (!response) throw Error("Unauthorized to delete");
     res.json(response);
   } catch (error) {
     next(error);
