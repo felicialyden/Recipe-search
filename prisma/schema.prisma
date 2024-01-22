@@ -9,13 +9,14 @@ datasource db {
 }
 
 model User {
-  id       Int     @id @default(autoincrement())
-  email    String  @unique
+  id    Int    @id @default(autoincrement())
+  email String @unique
 }
 
 model Saved {
-  id     Int    @id
-  title  String
-  image  String
-  userId String
+  id       Int    @id @default(autoincrement())
+  recipeId Int
+  title    String
+  image    String
+  userId   String
 }

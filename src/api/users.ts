@@ -77,7 +77,6 @@ router.get("/:id/saved", async (req, res, next) => {
     const response = await prisma.saved.findMany({
       where: { userId: userId },
     });
-
     console.log(response);
 
     if (!response) {
@@ -91,13 +90,12 @@ router.get("/:id/saved", async (req, res, next) => {
 
 router.post("/:id/saved", async (req, res, next) => {
   const userId = req.params.id;
-  console.log(userId)
   const { id, title, image } = req.body;
 
   try {
     const response = await prisma.saved.create({
       data: {
-        id,
+        recipeId: id,
         title,
         image,
         userId,
