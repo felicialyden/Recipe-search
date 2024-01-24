@@ -20,3 +20,11 @@ model Saved {
   image    String
   userId   String
 }
+
+model Pinned {
+  id       Int    @id @default(autoincrement())
+  recipeId Int
+  title    String
+  image    String
+  userId   String
+}

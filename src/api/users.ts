@@ -32,7 +32,6 @@ router.post("/", async (req, res, next) => {
       email,
       password,
     });
-    console.log(data, error, 'data, error');
     if (error) {
       throw Error(error.message);
     }
@@ -49,7 +48,6 @@ router.post("/login", async (req, res, next) => {
       email,
       password,
     });
-    console.log(data.user?.id);
     if (error) {
       throw Error(error.message);
     }
@@ -77,8 +75,6 @@ router.get("/:id/saved", async (req, res, next) => {
     const response = await prisma.saved.findMany({
       where: { userId: userId },
     });
-    console.log(response);
-
     if (!response) {
       throw Error("No saved recipes");
     }
@@ -113,6 +109,58 @@ router.delete("/:id/saved", async (req, res, next) => {
 
   try {
     const response = await prisma.saved.delete({
+      where: {
+        id,
+        userId,
+      },
+    });
+    if (!response) throw Error("Unauthorized to delete");
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/:id/pinned", async (req, res, next) => {
+  const userId = req.params.id;
+  try {
+    const response = await prisma.pinned.findMany({
+      where: { userId: userId },
+    });
+    if (!response) {
+      throw Error("No pinned recipes");
+    }
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/:id/pinned", async (req, res, next) => {
+  const userId = req.params.id;
+  const { id, title, image } = req.body;
+
+  try {
+    const response = await prisma.pinned.create({
+      data: {
+        recipeId: id,
+        title,
+        image,
+        userId,
+      },
+    });
+    res.json(response);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/:id/pinned", async (req, res, next) => {
+  const userId = req.params.id;
+  const { id } = req.body;
+
+  try {
+    const response = await prisma.pinned.delete({
       where: {
         id,
         userId,
