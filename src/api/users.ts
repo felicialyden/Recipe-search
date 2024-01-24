@@ -158,7 +158,7 @@ router.post("/:id/pinned", async (req, res, next) => {
 router.delete("/:id/pinned", async (req, res, next) => {
   const userId = req.params.id;
   const { id } = req.body;
-
+  console.log(userId, id)
   try {
     const response = await prisma.pinned.delete({
       where: {
