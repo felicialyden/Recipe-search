@@ -24,6 +24,19 @@ router.get("/:id", async (req, res, next) => {
   }
 });
 
+router.delete("/:id", async (req, res, next) => {
+  const userId = req.params.id;
+  try {
+    const { data, error } = await supabase.auth.admin.deleteUser(userId);
+    if (error) {
+      throw Error(error.message);
+    }
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/", async (req, res, next) => {
   const { email, password } = req.body;
   console.log(email, password);
@@ -73,9 +86,12 @@ router.put("/password", async (req, res, next) => {
   const { password, newPassword } = req.body;
 
   try {
-    const { error } = await supabase.rpc('change_user_password', { current_plain_password: password, new_plain_password: newPassword })
+    const { error } = await supabase.rpc("change_user_password", {
+      current_plain_password: password,
+      new_plain_password: newPassword,
+    });
     if (error) {
-      throw Error(error.message)
+      throw Error(error.message);
     }
     res.json("password changed");
   } catch (error) {
@@ -172,7 +188,7 @@ router.post("/:id/pinned", async (req, res, next) => {
 router.delete("/:id/pinned", async (req, res, next) => {
   const userId = req.params.id;
   const { id } = req.body;
-  console.log(userId, id)
+  console.log(userId, id);
   try {
     const response = await prisma.pinned.delete({
       where: {
