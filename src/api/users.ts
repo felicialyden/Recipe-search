@@ -73,11 +73,10 @@ router.put("/password", async (req, res, next) => {
   const { password, newPassword } = req.body;
 
   try {
-    const { data, error } = await supabase.rpc('change_user_password', { current_plain_password: password, new_plain_password: newPassword })
+    const { error } = await supabase.rpc('change_user_password', { current_plain_password: password, new_plain_password: newPassword })
     if (error) {
-      console.log(error)
+      throw Error(error.message)
     }
-    console.log(data, 'data!')
     res.json("password changed");
   } catch (error) {
     next(error);
