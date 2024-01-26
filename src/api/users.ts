@@ -69,6 +69,21 @@ router.post("/logout", async (req, res, next) => {
   }
 });
 
+router.put("/password", async (req, res, next) => {
+  const { password, newPassword } = req.body;
+
+  try {
+    const { data, error } = await supabase.rpc('change_user_password', { current_plain_password: password, new_plain_password: newPassword })
+    if (error) {
+      console.log(error)
+    }
+    console.log(data, 'data!')
+    res.json("password changed");
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/:id/saved", async (req, res, next) => {
   const userId = req.params.id;
   try {
