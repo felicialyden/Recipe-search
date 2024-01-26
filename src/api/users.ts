@@ -5,6 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 const router = Router();
 const supabaseUrl = process.env.SUPABASE_URL as string;
 const supabaseKey = process.env.SUPABASE_KEY as string;
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY as string;
 process.env.NODE_TLS_REJECT_UNAUTHORIZED;
 const supabase = createClient(supabaseUrl, supabaseKey);
 
@@ -26,8 +27,11 @@ router.get("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   const userId = req.params.id;
+  console.log(userId)
+  const serviceRole = createClient(supabaseUrl, supabaseServiceRoleKey);
+
   try {
-    const { data, error } = await supabase.auth.admin.deleteUser(userId);
+    const { data, error } = await serviceRole.auth.admin.deleteUser(userId);
     if (error) {
       throw Error(error.message);
     }
@@ -39,7 +43,6 @@ router.delete("/:id", async (req, res, next) => {
 
 router.post("/", async (req, res, next) => {
   const { email, password } = req.body;
-  console.log(email, password);
   try {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -116,6 +119,7 @@ router.get("/:id/saved", async (req, res, next) => {
 
 router.post("/:id/saved", async (req, res, next) => {
   const userId = req.params.id;
+  console.log(userId)
   const { id, title, image } = req.body;
 
   try {
@@ -136,7 +140,6 @@ router.post("/:id/saved", async (req, res, next) => {
 router.delete("/:id/saved", async (req, res, next) => {
   const userId = req.params.id;
   const { id } = req.body;
-
   try {
     const response = await prisma.saved.delete({
       where: {
