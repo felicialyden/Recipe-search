@@ -27,7 +27,6 @@ router.get("/:id", async (req, res, next) => {
 
 router.delete("/:id", async (req, res, next) => {
   const userId = req.params.id;
-  console.log(userId)
   const serviceRole = createClient(supabaseUrl, supabaseServiceRoleKey);
 
   try {
@@ -35,6 +34,11 @@ router.delete("/:id", async (req, res, next) => {
     if (error) {
       throw Error(error.message);
     }
+    const response = await prisma.$transaction([
+      prisma.saved.deleteMany({ where: { userId } }),
+      prisma.pinned.deleteMany({ where: { userId } }),
+    ])
+    console.log(response)
     res.json(data);
   } catch (error) {
     next(error);
