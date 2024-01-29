@@ -34,11 +34,10 @@ router.delete("/:id", async (req, res, next) => {
     if (error) {
       throw Error(error.message);
     }
-    const response = await prisma.$transaction([
+    await prisma.$transaction([
       prisma.saved.deleteMany({ where: { userId } }),
       prisma.pinned.deleteMany({ where: { userId } }),
     ])
-    console.log(response)
     res.json(data);
   } catch (error) {
     next(error);
@@ -106,6 +105,22 @@ router.put("/password", async (req, res, next) => {
   }
 });
 
+router.post("/password-email", async (req, res, next) => {
+  const { email } = req.body;
+  try {
+    const { data, error } = await supabase.auth
+    .resetPasswordForEmail(email)
+    if (error) {
+      throw Error(error.message);
+    }
+    console.log(data, 'data')
+    res.json(data);
+  } catch (error) {
+    console.log(error)
+    next(error);
+  }
+});
+
 router.get("/:id/saved", async (req, res, next) => {
   const userId = req.params.id;
   try {
@@ -123,7 +138,6 @@ router.get("/:id/saved", async (req, res, next) => {
 
 router.post("/:id/saved", async (req, res, next) => {
   const userId = req.params.id;
-  console.log(userId)
   const { id, title, image } = req.body;
 
   try {
