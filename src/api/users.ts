@@ -109,7 +109,7 @@ router.post("/reset-password", async (req, res, next) => {
   const { email } = req.body;
   try {
     const { error } = await supabase.auth
-    .resetPasswordForEmail(email, {redirectTo: 'http://localhost:5173/recipe-search-frontend/reset-password'})
+    .resetPasswordForEmail(email, {redirectTo: 'https://felicialyden.github.io/recipe-search-frontend/reset-password'})
     if (error) {
       throw Error(error.message);
     }
