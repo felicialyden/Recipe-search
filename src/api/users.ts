@@ -105,15 +105,31 @@ router.put("/password", async (req, res, next) => {
   }
 });
 
-router.post("/password-email", async (req, res, next) => {
+router.post("/reset-password", async (req, res, next) => {
   const { email } = req.body;
   try {
-    const { data, error } = await supabase.auth
-    .resetPasswordForEmail(email)
+    const { error } = await supabase.auth
+    .resetPasswordForEmail(email, {redirectTo: 'http://localhost:5173/recipe-search-frontend/reset-password'})
     if (error) {
       throw Error(error.message);
     }
-    console.log(data, 'data')
+    res.json('Password email sent');
+  } catch (error) {
+    console.log(error)
+    next(error);
+  }
+});
+
+router.put("/reset-password", async (req, res, next) => {
+  const { newPassword } = req.body;
+
+  try {
+    const { data, error } = await supabase.auth.updateUser({
+      password: newPassword
+    })
+    if (error) {
+      throw Error(error.message);
+    }
     res.json(data);
   } catch (error) {
     console.log(error)
