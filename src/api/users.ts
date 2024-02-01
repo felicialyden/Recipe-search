@@ -28,7 +28,6 @@ router.get("/:id", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   const userId = req.params.id;
   const serviceRole = createClient(supabaseUrl, supabaseServiceRoleKey);
-
   try {
     const { data, error } = await serviceRole.auth.admin.deleteUser(userId);
     if (error) {
@@ -90,7 +89,6 @@ router.post("/logout", async (req, res, next) => {
 
 router.put("/password", async (req, res, next) => {
   const { password, newPassword } = req.body;
-
   try {
     const { error } = await supabase.rpc("change_user_password", {
       current_plain_password: password,
@@ -109,7 +107,7 @@ router.post("/reset-password", async (req, res, next) => {
   const { email } = req.body;
   try {
     const { error } = await supabase.auth
-    .resetPasswordForEmail(email, {redirectTo: 'https://felicialyden.github.io/recipe-search-frontend/reset-password'})
+    .resetPasswordForEmail(email, {redirectTo: 'https://felicialyden.github.io/recipe-search-frontend/#/reset-password'})
     if (error) {
       throw Error(error.message);
     }
@@ -122,7 +120,6 @@ router.post("/reset-password", async (req, res, next) => {
 
 router.put("/reset-password", async (req, res, next) => {
   const { newPassword } = req.body;
-
   try {
     const { data, error } = await supabase.auth.updateUser({
       password: newPassword
@@ -225,7 +222,6 @@ router.post("/:id/pinned", async (req, res, next) => {
 router.delete("/:id/pinned", async (req, res, next) => {
   const userId = req.params.id;
   const { id } = req.body;
-  console.log(userId, id);
   try {
     const response = await prisma.pinned.delete({
       where: {
